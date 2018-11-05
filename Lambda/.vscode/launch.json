@@ -1,0 +1,22 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": ".NET Core Remote Attach",
+            "type": "coreclr",
+            "request": "attach",
+            "processId": "1",
+            "pipeTransport": {
+                "pipeProgram": "docker",
+                "pipeArgs": [ "exec -i debugger"],
+                "debuggerPath": "/vsdbg/vsdbg",
+                "pipeCwd": "${workspaceRoot}",
+                "quoteArgs": false
+            },
+
+            "sourceFileMap": {
+                "/var/task": "${workspaceRoot}"
+            }
+        }
+    ]
+}
