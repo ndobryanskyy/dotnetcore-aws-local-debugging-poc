@@ -43,8 +43,6 @@ namespace MockLambdaRuntime
             var handler = GetFunctionHandler(positionalArgs);
             var body = GetEventBody(positionalArgs);
 
-            Console.WriteLine(body);
-
             var lambdaContext = new MockLambdaContext(handler, body);
 
             var userCodeLoader = new UserCodeLoader(handler, InternalLogger.NO_OP_LOGGER);
