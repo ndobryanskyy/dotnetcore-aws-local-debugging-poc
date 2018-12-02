@@ -1,0 +1,27 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Publish Using Docker",
+            "command": "docker run --rm --mount type=bind,src=${workspaceFolder},dst=/var/task lambci/lambda:build-dotnetcore2.1 dotnet publish -c Debug -o out",
+            "type": "shell",
+            "group": "build",
+            "presentation": {
+                "reveal": "always"
+            },
+            "problemMatcher": "$msCompile",
+        },
+        {
+            "label": "Publish Using Local SDK",
+            "command": "dotnet publish -c Debug -o out",
+            "type": "shell",
+            "group": "build",
+            "presentation": {
+                "reveal": "always"
+            },
+            "problemMatcher": "$msCompile"
+        }
+    ]
+}

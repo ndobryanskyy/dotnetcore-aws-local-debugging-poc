@@ -2,20 +2,35 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": ".NET Core Remote Attach",
+            "name": ".NET Core Docker Attach",
             "type": "coreclr",
             "request": "attach",
             "processId": "1",
+
             "pipeTransport": {
-                "pipeProgram": "docker",
-                "pipeArgs": [ "exec -i debugger"],
+                "pipeProgram": "sh",
+                "pipeArgs": [ 
+                    "-c",
+                    "docker exec -i $(docker ps -q -f publish=6000)"
+                ],
                 "debuggerPath": "/vsdbg/vsdbg",
-                "pipeCwd": "${workspaceRoot}",
-                "quoteArgs": false
+                "pipeCwd": "${workspaceFolder}",
+            },
+
+            "windows": {
+                "pipeTransport": {
+                    "pipeProgram": "powershell",
+                    "pipeArgs": [ 
+                        "-c",
+                        "docker exec -i $(docker ps -q -f publish=6000)"
+                    ],
+                    "debuggerPath": "/vsdbg/vsdbg",
+                    "pipeCwd": "${workspaceFolder}",
+                }
             },
 
             "sourceFileMap": {
-                "/var/task": "${workspaceRoot}"
+                "/var/task": "${workspaceFolder}"
             }
         }
     ]

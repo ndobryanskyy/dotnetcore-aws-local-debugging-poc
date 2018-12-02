@@ -6,12 +6,8 @@ using Amazon.Lambda.Core;
 
 namespace Lambda
 {
-    /// <summary>
-    /// docker run -i --rm --name debugger --mount src=$(pwd)/out,dst=/var/task,type=bind,readonly me/lambci-dotnetcore2.1 Lambda::Lambda.TestFunction::Handler -d "'Debugger Works!'"
-    /// </summary>
     public class TestFunction
-    {
-        
+    {   
         /// <summary>
         /// A simple function that takes a string and does a ToUpper
         /// </summary>

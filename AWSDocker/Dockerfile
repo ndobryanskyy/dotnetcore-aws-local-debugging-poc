@@ -10,12 +10,11 @@ FROM lambci/lambda-base as runtime
 ENV NUGET_XMLDOC_MODE skip
 
 RUN rm -rf /var/runtime /var/lang && \
-    curl https://lambci.s3.amazonaws.com/fs/dotnetcore2.1.tgz | tar -zx -C / && \
-    curl -sSL https://aka.ms/getvsdbgsh | bash /dev/stdin -v latest -l /vsdbg
+    curl https://lambci.s3.amazonaws.com/fs/dotnetcore2.1.tgz | tar -zx -C /
 
 COPY --from=build /app/MockBootstraps.* /var/runtime/
 
-ENV PATH=/var/lang/bin:/usr/local/bin:/usr/bin/:/bin:/vsdbg \
+ENV PATH=/var/lang/bin:/usr/local/bin:/usr/bin/:/bin \
     LD_LIBRARY_PATH=/var/lang/lib:/lib64:/usr/lib64:/var/runtime:/var/runtime/lib:/var/task:/var/task/lib \
     AWS_EXECUTION_ENV=AWS_Lambda_dotnetcore2.1
 
