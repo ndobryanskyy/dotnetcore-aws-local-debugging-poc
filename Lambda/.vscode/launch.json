@@ -11,7 +11,7 @@
                 "pipeProgram": "sh",
                 "pipeArgs": [ 
                     "-c",
-                    "docker exec -i $(docker ps -q -f publish=6000)"
+                    "docker exec -i $(docker ps -q -f publish=6000) ${debuggerCommand}"
                 ],
                 "debuggerPath": "/vsdbg/vsdbg",
                 "pipeCwd": "${workspaceFolder}",
@@ -20,9 +20,9 @@
             "windows": {
                 "pipeTransport": {
                     "pipeProgram": "powershell",
-                    "pipeArgs": [ 
+                    "pipeArgs": [
                         "-c",
-                        "docker exec -i $(docker ps -q -f publish=6000)"
+                        "docker exec -i $(docker ps -q -f publish=6000) ${debuggerCommand}"
                     ],
                     "debuggerPath": "/vsdbg/vsdbg",
                     "pipeCwd": "${workspaceFolder}",

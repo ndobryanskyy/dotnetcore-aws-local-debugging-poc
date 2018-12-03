@@ -13,11 +13,13 @@ To run this sample you'll need:
 Also you'll need to download `vsdbg` to you machine in order to mount it later to the running Docker container with the Lambda. You could easily get it  to your home directory by invoking these commands from the repository root (*or anywhere actually*):
 
 ```sh
+# Script is compatible with powershell and bash
+
 # Create directory to store debugger locally
-mkdir ~/vsdbg
+mkdir $HOME/vsdbg
 
 # Mount this to get built vsdbg for AWS Lambda runtime container on host machine
-docker run --rm --mount type=bind,src=~/vsdbg,dst=/vsdbg --entrypoint bash lambci/lambda:dotnetcore2.0 -c "curl -sSL https://aka.ms/getvsdbgsh | bash /dev/stdin -v latest -l /vsdbg"
+docker run --rm --mount type=bind,src=$HOME/vsdbg,dst=/vsdbg --entrypoint bash lambci/lambda:dotnetcore2.0 -c "curl -sSL https://aka.ms/getvsdbgsh | bash /dev/stdin -v latest -l /vsdbg"
 ```
 
 And this sample needs patched version of `lambci/lambda:dotnetcore2.1` [image](https://github.com/lambci/docker-lambda/blob/master/dotnetcore2.1/run/Dockerfile) with enabled debugging support for .NET Core (it will work on 2.0 version too, I took the latest just to showcase).
@@ -27,7 +29,7 @@ From repository root run these commands:
 ```sh
 cd AWSDocker
 
-docker build -q -t me/lambda:dotnetcore2.1 .
+docker build -t me/lambda:dotnetcore2.1 .
 cd ../Lambda
 
 # You need VS Code available from PATH for that - this will open IDE
@@ -50,10 +52,21 @@ Open `/Lambda` folder with VS Code. And hit `Ctrl + Shift + B` to get the list o
 
 Now pop open VS Code integrated terminal by hitting ``Ctrl + ` ``.  We will use use it to invoke our function in a way, that aligns closely with how SAM CLI does it. Run this command:
 
-```sh
+From `powershell`: 
+
+```powershell
 # Invoke AWS Lambda
-docker run --rm --mount type=bind,src=~/vsdbg,dst=/vsdbg,readonly --mount type=bind,src=$(pwd)/out,dst=/var/task,readonly --publish 6000 me/lambda:dotnetcore2.1 Lambda::Lambda.TestFunction::Handler -d "'Debugger Works!'"
+
+docker run --rm --mount type=bind,src=$HOME/vsdbg,dst=/vsdbg,readonly --mount type=bind,src=$PWD/out,dst=/var/task,readonly --publish 6000 me/lambda:dotnetcore2.1 Lambda::Lambda.TestFunction::Handler -d "'Debugger Works!'"
 ```
+
+From `bash`:
+
+```sh
+docker run --rm --mount type=bind,src=$HOME/vsdbg,dst=/vsdbg,readonly --mount type=bind,src=$PWD/out,dst=/var/task,readonly --publish 6000 me/lambda:dotnetcore2.1 Lambda::Lambda.TestFunction::Handler -d '"Debugger Works!"'
+```
+
+*Note the difference is only in argument quoting*.
 
 ![Function invocation](/docs/screenshots/function-invocation.png?raw=true "Function invocation")
 
@@ -115,7 +128,7 @@ docker ps -q -f publish=<debugger_port>
     "pipeProgram": "powershell",
     "pipeArgs": [ 
         "-c",
-        "docker exec -i $(docker ps -q -f publish=6000)"
+        "docker exec -i $(docker ps -q -f publish=6000) ${debuggerCommand}"
     ],
     "debuggerPath": "/vsdbg/vsdbg",
     "pipeCwd": "${workspaceFolder}",
